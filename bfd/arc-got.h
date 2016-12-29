@@ -22,6 +22,8 @@
 #ifndef ARC_GOT_H
 #define ARC_GOT_H
 
+#define TCB_SIZE (8)
+
 enum tls_type_e
 {
   GOT_UNKNOWN = 0,
@@ -354,7 +356,7 @@ relocate_fix_got_relocs_for_got_info (struct got_entry **          list_p,
 		  = tls_sec->output_section->vma;
 
 		bfd_put_32 (output_bfd,
-			    sym_value - sec_vma,
+			    sym_value - sec_vma + TCB_SIZE,
 			    htab->sgot->contents + entry->offset
 			    + (entry->existing_entries == TLS_GOT_MOD_AND_OFF
 			       ? 4 : 0));
