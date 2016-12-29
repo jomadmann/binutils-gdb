@@ -480,8 +480,13 @@ GOT_OFFSET = %#lx, GOT_VMA = %#lx, INDEX = %ld, ADDEND = 0x0\n",
 	{
 	  bfd_vma addend = 0;
 	  if (list->type == GOT_TLS_IE)
+	  {
 	    addend = bfd_get_32 (output_bfd,
 				 htab->sgot->contents + got_offset);
+	    /* Subtract TCB_SIZE for it not to be included in the addend of
+	     * the dynamic reloc. It is done dynamically. */
+	    addend -= TCB_SIZE;
+	  }
 
 	  ADD_RELA (output_bfd, got,
 		    got_offset + (e == TLS_GOT_MOD_AND_OFF ? 4 : 0),
