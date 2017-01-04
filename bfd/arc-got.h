@@ -356,7 +356,7 @@ relocate_fix_got_relocs_for_got_info (struct got_entry **          list_p,
 		  = tls_sec->output_section->vma;
 
 		bfd_put_32 (output_bfd,
-			    sym_value - sec_vma + TCB_SIZE,
+			    sym_value - sec_vma + (elf_hash_table (info)->dynamic_sections_created ? 0 : TCB_SIZE),
 			    htab->sgot->contents + entry->offset
 			    + (entry->existing_entries == TLS_GOT_MOD_AND_OFF
 			       ? 4 : 0));
@@ -483,9 +483,6 @@ GOT_OFFSET = %#lx, GOT_VMA = %#lx, INDEX = %ld, ADDEND = 0x0\n",
 	  {
 	    addend = bfd_get_32 (output_bfd,
 				 htab->sgot->contents + got_offset);
-	    /* Subtract TCB_SIZE for it not to be included in the addend of
-	     * the dynamic reloc. It is done dynamically. */
-	    addend -= TCB_SIZE;
 	  }
 
 	  ADD_RELA (output_bfd, got,
